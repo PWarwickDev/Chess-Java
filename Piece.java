@@ -14,6 +14,10 @@ public class Piece {
         return type;
     } //will be overridden by children piece types
 
+    char getColor() {
+        return color;
+    }
+
 }
 
 class King extends Piece {
