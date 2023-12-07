@@ -29,7 +29,7 @@ public class Board {
                     } else {
                         g.setColor(Color.black);
                     }
-                    g.fillRect(col, row, col + 99, row + 99); //fillrect overhangs by 1
+                    g.fillRect(col, row, col + 100, row + 100); //fillrect overhangs by 1
                     colorToggle = !colorToggle;
                 }
                 colorToggle = !colorToggle;

@@ -8,12 +8,14 @@ public class PieceTest {
         Piece p = new Piece();
         assertEquals("Error in piece type", 'N', p.getType());
         assertEquals("Error in piece color", 'W', p.getColor());
+        assertNull("Error in piece image loading", p.img);
+
     }
     @Test
     public void kingTest() {
-        Piece p = new King('R');
+        Piece p = new King('B');
         assertEquals("Error in piece type", 'K', p.getType());
-        assertEquals("Error in piece color", 'R', p.getColor());
+        assertEquals("Error in piece color", 'B', p.getColor());
     }
     @Test
     public void queenTest() {
@@ -31,9 +33,9 @@ public class PieceTest {
 
     @Test
     public void bishopTest() {
-        Piece p = new Bishop('R');
+        Piece p = new Bishop('B');
         assertEquals("Error in piece type", 'B', p.getType());
-        assertEquals("Error in piece color", 'R', p.getColor());
+        assertEquals("Error in piece color", 'B', p.getColor());
     }
 
     @Test
@@ -45,8 +47,8 @@ public class PieceTest {
 
     @Test
     public void pawnTest() {
-        Piece p = new Pawn('R');
+        Piece p = new Pawn('B');
         assertEquals("Error in piece type", 'P', p.getType());
-        assertEquals("Error in piece color", 'R', p.getColor());
+        assertEquals("Error in piece color", 'B', p.getColor());
     }
 }
