@@ -8,7 +8,7 @@ public class PieceTest {
         Piece p = new Piece();
         assertEquals("Error in piece type", 'N', p.getType());
         assertEquals("Error in piece color", 'W', p.getColor());
-        assertNull("Error in piece image loading", p.img);
+        assertNull("Error in piece image loading", p.ii);
 
     }
     @Test

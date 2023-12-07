@@ -11,7 +11,6 @@ public class Main {
     private void displayGUI() {
         JFrame frame = new JFrame("Chess");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         JPanel contentPane = new JPanel();
         contentPane.setLayout (new BorderLayout(GAP, GAP));
         JPanel drawingBoard = new Board.DrawingBoard();

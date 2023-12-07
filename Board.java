@@ -3,6 +3,8 @@ import java.awt.*;
 
 public class Board {
 
+    static PieceBoard pb = new PieceBoard();
+
     static class DrawingBoard extends JPanel {
         private static final int WIDTH = 800;
         private static final int HEIGHT = 800;
@@ -19,6 +21,7 @@ public class Board {
 
         @Override
         protected void paintComponent(Graphics g) {
+
             super.paintComponent(g);
             boolean colorToggle = false;
             for (int row = 0; row < HEIGHT; row += 100) {
@@ -34,6 +37,11 @@ public class Board {
                 }
                 colorToggle = !colorToggle;
             }
+            int w = pb.pieceLayout[0][0].ii.getIconWidth();
+            int h = pb.pieceLayout[0][0].ii.getIconHeight();
+            setPreferredSize(new Dimension(w, h));
+            pb.pieceLayout[0][0].ii.paintIcon(this, g, 0, 0);
+           System.out.println(pb.pieceLayout[0][0].ii.getDescription());
         }
     }
 }
