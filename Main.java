@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Main {
 
     private static final int GAP = 5;
-    public static void main(String[] args) {
+    static PieceBoard pb = new PieceBoard();
+    static JLabel label = new JLabel();
+
+    public static void main(String[] args) throws IOException {
         Runnable runnable = () -> new Main().displayGUI();
         EventQueue.invokeLater(runnable);
     }
@@ -15,7 +19,6 @@ public class Main {
         contentPane.setLayout (new BorderLayout(GAP, GAP));
         JPanel drawingBoard = new Board.DrawingBoard();
         contentPane.add (drawingBoard, BorderLayout.CENTER);
-
 
         frame.setContentPane(contentPane);
         frame.pack();
