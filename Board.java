@@ -2,15 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Board {
+    public static PieceBoard pb = new PieceBoard();
     static class DrawingBoard extends JPanel {
         private static final int WIDTH = 960;
         private static final int HEIGHT = 960;
 
-        static PieceBoard pb = new PieceBoard();
+        private static final int OFFSET = 120;
 
-        public DrawingBoard() {
-            setOpaque(true);
-        }
+
+        public DrawingBoard() { setOpaque(true);}
 
         @Override
         public Dimension getPreferredSize() {
@@ -23,16 +23,18 @@ public class Board {
 
             super.paintComponent(g);
             boolean colorToggle = false;
-            for (int row = 0; row < HEIGHT; row += 120) {
-                for (int col = 0; col < WIDTH; col += 120) {
+            for (int row = 0; row < HEIGHT; row += OFFSET) {
+                for (int col = 0; col < WIDTH; col += OFFSET) {
                     if (!colorToggle) {
                         g.setColor(Color.white);
                     } else {
                         g.setColor(Color.darkGray);
                     }
-                    g.fillRect(col, row, col + 120, row + 120);
-                    if(pb.pieceLayout[row/120][col/120] != null) {
-                        g.drawImage(pb.pieceLayout[row / 120][col / 120].img, col, row, null);
+                    g.fillRect(col, row, OFFSET, OFFSET);
+                    if(pb.pieceLayout[row/OFFSET][col/OFFSET] != null) {
+                        g.drawImage(pb.pieceLayout[row / OFFSET][col / OFFSET].img, col, row, null);
+                        pb.pieceLayout[row / OFFSET][col / OFFSET].xPos = col;
+                        pb.pieceLayout[row / OFFSET][col / OFFSET].yPos = row;
                     }
                     colorToggle = !colorToggle;
                 }
@@ -40,6 +42,7 @@ public class Board {
             }
 
         }
+
     }
 }
 
