@@ -49,9 +49,9 @@ class King extends Piece  {
         color = c;
         type = 'K';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_king_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-king.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_king_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-king.png"));
         }
     }
 
@@ -62,9 +62,9 @@ class Queen extends Piece {
         color = c;
         type = 'Q';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_queen_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-queen.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_queen_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-queen.png"));
         }
     }
 
@@ -75,9 +75,9 @@ class Rook extends Piece {
         color = c;
         type = 'R';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_rook_100x100.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-rook.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_rook_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-rook.png"));
         }
     }
 
@@ -88,9 +88,9 @@ class Bishop extends Piece {
         color = c;
         type = 'B';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_bishop_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-bishop.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_bishop_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-bishop.png"));
         }
     }
 
@@ -101,9 +101,9 @@ class Knight extends Piece {
         color = c;
         type = 'H';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_knight_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-knight.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_knight_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-knight.png"));
         }
 
     }
@@ -115,9 +115,9 @@ class Pawn extends Piece {
         color = c;
         type = 'P';
         if(color == 'W') {
-            img = ImageIO.read(new File("chessPieceFiles\\white_pawn_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\w-pawn.png"));
         } else {
-            img = ImageIO.read(new File("chessPieceFiles\\black_pawn_80x80.png"));
+            img = ImageIO.read(new File("chessPieceFiles\\b-pawn.png"));
         }
     }
 

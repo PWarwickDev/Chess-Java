@@ -1,14 +1,12 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Board {
     static class DrawingBoard extends JPanel {
-        private static final int WIDTH = 800;
-        private static final int HEIGHT = 800;
+        private static final int WIDTH = 960;
+        private static final int HEIGHT = 960;
+
+        static PieceBoard pb = new PieceBoard();
 
         public DrawingBoard() {
             setOpaque(true);
@@ -22,28 +20,25 @@ public class Board {
         @Override
         protected void paintComponent(Graphics g) {
 
-            final BufferedImage image;
-            try {
-                image = ImageIO.read(new File("chessPieceFiles\\white_rook_100x100.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
             super.paintComponent(g);
             boolean colorToggle = false;
-            for (int row = 0; row < HEIGHT; row += 100) {
-                for (int col = 0; col < WIDTH; col += 100) {
+            for (int row = 0; row < HEIGHT; row += 120) {
+                for (int col = 0; col < WIDTH; col += 120) {
                     if (!colorToggle) {
                         g.setColor(Color.white);
                     } else {
-                        g.setColor(Color.black);
+                        g.setColor(Color.darkGray);
                     }
-                    g.fillRect(col, row, col + 100, row + 100);
+                    g.fillRect(col, row, col + 120, row + 120);
+                    if(pb.pieceLayout[row/120][col/120] != null) {
+                        g.drawImage(pb.pieceLayout[row / 120][col / 120].img, col, row, null);
+                    }
                     colorToggle = !colorToggle;
                 }
                 colorToggle = !colorToggle;
             }
-            g.drawImage(image, 100, 0, null);
+
         }
     }
 }

@@ -1,14 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class Main {
 
     private static final int GAP = 5;
-    static PieceBoard pb = new PieceBoard();
-    static JLabel label = new JLabel();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Runnable runnable = () -> new Main().displayGUI();
         EventQueue.invokeLater(runnable);
     }
