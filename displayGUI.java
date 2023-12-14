@@ -4,7 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class displayGUI extends JFrame{
+public class displayGUI extends JFrame {
+    public static Piece selectedPiece = null;
     private static final int GAP = 5;
     displayGUI() {
         JFrame frame = new JFrame("Chess");
@@ -13,6 +14,7 @@ public class displayGUI extends JFrame{
         contentPane.setLayout(new BorderLayout(GAP, GAP));
         JPanel drawingBoard = new Board.DrawingBoard();
         contentPane.add(drawingBoard);
+        frame.add(contentPane);
 
         contentPane.addMouseListener(new MouseListener() {
             @Override
@@ -22,14 +24,15 @@ public class displayGUI extends JFrame{
 
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println(e.getX() + ", " + e.getY());
-                System.out.println(getPieceType(e.getX(), e.getY()) +
-                        " , " + getPieceColor(e.getX(), e.getY()));
+                selectedPiece = getPiece(e.getX(), e.getY());
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                if (selectedPiece != null) {
+                    selectedPiece.move(e.getX() / 120, e.getY() / 120);
+                    repaint();
+                }
             }
 
             @Override
@@ -46,7 +49,11 @@ public class displayGUI extends JFrame{
         contentPane.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-
+                if (selectedPiece != null) {
+                    selectedPiece.xPos = e.getX();
+                    selectedPiece.yPos = e.getY();
+                    repaint();
+                }
             }
 
             @Override
@@ -55,7 +62,6 @@ public class displayGUI extends JFrame{
             }
         });
 
-        frame.getContentPane().add(contentPane);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
@@ -63,16 +69,11 @@ public class displayGUI extends JFrame{
     }
 
 
-    public static char getPieceType(int x, int y) {
+    public static Piece getPiece(int x, int y) {
         if (Board.pb.pieceLayout[y / 120][x / 120] != null) {
-            return Board.pb.pieceLayout[y / 120][x / 120].type;
+            return Board.pb.pieceLayout[y / 120][x / 120];
         }
-        return '@';
+        return null;
     }
-    public static char getPieceColor(int x, int y) {
-        if (Board.pb.pieceLayout[y / 120][x / 120] != null) {
-            return Board.pb.pieceLayout[y / 120][x / 120].color;
-        }
-        return '@';
-    }
+
 }

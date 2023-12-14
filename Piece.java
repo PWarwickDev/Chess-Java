@@ -21,8 +21,11 @@ public class Piece {
         return type;
     } //will be overridden by children piece types
 
-    char getColor() {
-        return color;
+    char getColor() {return color;}
+
+    void move(int x, int y) {
+        xPos = x;
+        yPos = y;
     }
 
 
