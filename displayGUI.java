@@ -1,3 +1,4 @@
+import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -7,6 +8,8 @@ import java.awt.event.MouseMotionListener;
 public class displayGUI extends JFrame {
     public static Piece selectedPiece = null;
     private static final int GAP = 5;
+    static int fromX = 0;
+    static int fromY = 0;
     displayGUI() {
         JFrame frame = new JFrame("Chess");
         JPanel contentPane = new JPanel();
@@ -16,7 +19,7 @@ public class displayGUI extends JFrame {
         contentPane.add(drawingBoard);
         frame.add(contentPane);
 
-        contentPane.addMouseListener(new MouseListener() {
+        drawingBoard.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
@@ -30,8 +33,10 @@ public class displayGUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (selectedPiece != null) {
-                    selectedPiece.move(e.getX() / 120, e.getY() / 120);
-                    repaint();
+                    Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
+                            e.getX()/120, e.getY()/120);
+                    selectedPiece.setPos(e.getX(), e.getY());
+                    drawingBoard.repaint();
                 }
             }
 
@@ -46,13 +51,12 @@ public class displayGUI extends JFrame {
             }
         });
 
-        contentPane.addMouseMotionListener(new MouseMotionListener() {
+        drawingBoard.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null) {
-                    selectedPiece.xPos = e.getX();
-                    selectedPiece.yPos = e.getY();
-                    repaint();
+                    selectedPiece.setPos(e.getX(), e.getY());
+                    drawingBoard.repaint();
                 }
             }
 
@@ -71,6 +75,8 @@ public class displayGUI extends JFrame {
 
     public static Piece getPiece(int x, int y) {
         if (Board.pb.pieceLayout[y / 120][x / 120] != null) {
+            fromX = x/120;
+            fromY = y/120;
             return Board.pb.pieceLayout[y / 120][x / 120];
         }
         return null;

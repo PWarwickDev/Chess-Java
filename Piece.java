@@ -16,6 +16,13 @@ public class Piece {
         yPos = 0;
     }
 
+    int getxPos() {
+        return xPos;
+    }
+
+    int getyPos() {
+        return yPos;
+    }
 
     char getType() {
         return type;
@@ -23,7 +30,7 @@ public class Piece {
 
     char getColor() {return color;}
 
-    void move(int x, int y) {
+    void setPos(int x, int y) {
         xPos = x;
         yPos = y;
     }
