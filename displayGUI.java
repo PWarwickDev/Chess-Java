@@ -66,7 +66,7 @@ public class displayGUI extends JFrame {
                 if (selectedPiece != null) {
                     if(e.getX() <= 960 && e.getY() <= 960) {
                         System.out.println(e.getX() + " " + e.getY());
-                        selectedPiece.setPos(e.getX(), e.getY());
+                        selectedPiece.setPos(e.getX() - 60, e.getY() - 60); // Updates piece to be centered on mouse while dragging
                         drawingBoard.repaint();
                     }
                 }
