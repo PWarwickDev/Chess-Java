@@ -20,7 +20,6 @@ public class Board {
 
         @Override
         protected void paintComponent(Graphics g) {
-            System.out.println("method called to paint");
             super.paintComponent(g);
             boolean colorToggle = false;
             for (int row = 0; row < HEIGHT; row += OFFSET) {

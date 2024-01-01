@@ -33,10 +33,12 @@ public class displayGUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (selectedPiece != null) {
-                    Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
-                            e.getX()/120, e.getY()/120);
-                    selectedPiece.setPos(e.getX(), e.getY());
-                    drawingBoard.repaint();
+                    if(e.getX() <= 960 && e.getY() <= 960) {
+                        Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
+                                e.getX() / 120, e.getY() / 120);
+                        selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY()  - (e.getY() % 120)); //Updates piece to align within tiles
+                        drawingBoard.repaint();
+                    }
                 }
             }
 
@@ -55,8 +57,10 @@ public class displayGUI extends JFrame {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null) {
-                    selectedPiece.setPos(e.getX(), e.getY());
-                    drawingBoard.repaint();
+                    if(e.getX() <= 960 && e.getY() <= 960) {
+                        selectedPiece.setPos(e.getX(), e.getY());
+                        drawingBoard.repaint();
+                    }
                 }
             }
 
