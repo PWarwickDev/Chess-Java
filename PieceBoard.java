@@ -26,11 +26,24 @@ public class PieceBoard {
     }
 
     public void updateBoard(Piece[][] pb, int x1, int y1, int x2, int y2) {
-        System.out.println(x1 + ", " + y1 + " to " + x2 + ", " + y2);
+        // calling this method is only possible if the move is a valid one
         Piece pTemp = null;
+        if (pb[y2][x2] != null) { // Makes sure the destination is empty
+            pb[y2][x2] = null;
+        }
+        //Swapping of pieces
         pTemp = pb[y1][x1];
         pb[y1][x1] = pb[y2][x2];
         pb[y2][x2] = pTemp;
+    }
+    public boolean isValidMove(Piece[][] pb, int x1, int y1, int x2, int y2) {
+        if (pb[y1][x1] != null && pb[y2][x2] != null) {
+            if (pb[y1][x1].color == pb[y2][x2].color) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

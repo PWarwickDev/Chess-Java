@@ -34,10 +34,17 @@ public class displayGUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 if (selectedPiece != null) {
                     if(e.getX() <= 960 && e.getY() <= 960) {
-                        Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
-                                e.getX() / 120, e.getY() / 120);
-                        selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY()  - (e.getY() % 120)); //Updates piece to align within tiles
-                        drawingBoard.repaint();
+                        //Checking move validity before updating piece board
+                        if (Board.pb.isValidMove(Board.pb.pieceLayout, fromX, fromY,
+                                e.getX() / 120, e.getY() / 120)) {
+                            Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
+                                    e.getX() / 120, e.getY() / 120);
+                            selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY() - (e.getY() % 120)); //Updates piece to align within tiles
+                            drawingBoard.repaint();
+                        } else {
+                            selectedPiece.setPos(fromX * 120, fromY * 120); // Resetting piece if move is invalid
+                            drawingBoard.repaint();
+                        }
                     }
                 }
             }
@@ -58,6 +65,7 @@ public class displayGUI extends JFrame {
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null) {
                     if(e.getX() <= 960 && e.getY() <= 960) {
+                        System.out.println(e.getX() + " " + e.getY());
                         selectedPiece.setPos(e.getX(), e.getY());
                         drawingBoard.repaint();
                     }
