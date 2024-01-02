@@ -1,8 +1,6 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
 
 public class Piece {
     char color; // piece color, either W or B
@@ -18,13 +16,6 @@ public class Piece {
         yPos = 0;
     }
 
-    int getxPos() {
-        return xPos;
-    }
-
-    int getyPos() {
-        return yPos;
-    }
 
     char getType() {
         return type;
@@ -41,10 +32,6 @@ public class Piece {
         return false;
     }
 
-
-    public boolean checkPath(int x1, int y1, int x2, int y2) {
-        return false;
-    }
 }
 
 class King extends Piece  {
@@ -63,10 +50,7 @@ class King extends Piece  {
     public boolean canMove(int x, int y, int newX, int newY) {
         int distX = Math.abs(newX - x);
         int distY = Math.abs(newY - y);
-        if (distX + distY <= 2 && distX - distY != 2 && distY - distX != 2) {
-            return true;
-        }
-        return false;
+        return distX + distY <= 2 && distX - distY != 2 && distY - distX != 2;
     }
 
 
@@ -88,12 +72,8 @@ class Queen extends Piece {
     public boolean canMove(int x, int y, int newX, int newY) throws IOException {
         Piece tmpB = new Bishop(this.getColor());
         Piece tmpR = new Rook(this.getColor()); //Used to evaluate queen movement as they can move as rooks or bishops do
-        boolean bishopBool = false;
-        boolean rookBool = false;
-        if (tmpB.canMove(x, y, newX, newY) || tmpR.canMove(x, y, newX, newY)) {
-            return true;
-        }
-        return false;
+        //Since these are mutually exclusive, a simple or produces valid cases.
+        return tmpB.canMove(x, y, newX, newY) || tmpR.canMove(x, y, newX, newY);
     }
 
 }

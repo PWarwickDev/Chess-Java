@@ -11,6 +11,7 @@ public class displayGUI extends JFrame {
     private static final int GAP = 5;
     static int fromX = 0;
     static int fromY = 0;
+    static char currPlayer = 'W'; // Current player color
     displayGUI() {
         JFrame frame = new JFrame("Chess");
         JPanel contentPane = new JPanel();
@@ -41,6 +42,7 @@ public class displayGUI extends JFrame {
                                         e.getX() / 120, e.getY() / 120);
                                 selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY() - (e.getY() % 120)); //Updates piece to align within tiles
                                 drawingBoard.repaint();
+                                currPlayer = currPlayer == 'W' ? 'B' : 'W'; // Swapping current player
                             } else {
                                 selectedPiece.setPos(fromX * 120, fromY * 120); // Resetting piece if move is invalid
                                 drawingBoard.repaint();
@@ -93,7 +95,7 @@ public class displayGUI extends JFrame {
 
 
     public static Piece selectPiece(int x, int y) {
-        if (Board.pb.pieceLayout[y / 120][x / 120] != null) {
+        if (Board.pb.pieceLayout[y / 120][x / 120] != null && currPlayer == Board.pb.pieceLayout[y / 120][x / 120].getColor()) {
             fromX = x/120;
             fromY = y/120;
             return Board.pb.getPiece(x / 120, y / 120);
