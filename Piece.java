@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class Piece {
     char color; // piece color, either W or B
@@ -35,10 +37,18 @@ public class Piece {
         yPos = y;
     }
 
+    boolean canMove(int x, int y, int newX, int newY) throws IOException {
+        return false;
+    }
 
+
+    public boolean checkPath(int x1, int y1, int x2, int y2) {
+        return false;
+    }
 }
 
 class King extends Piece  {
+
 
     public King(char c) throws IOException {
         color = c;
@@ -49,10 +59,21 @@ class King extends Piece  {
             img = ImageIO.read(new File("chessPieceFiles\\b-king.png"));
         }
     }
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) {
+        int distX = Math.abs(newX - x);
+        int distY = Math.abs(newY - y);
+        if (distX + distY <= 2 && distX - distY != 2 && distY - distX != 2) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
 
 class Queen extends Piece {
+
     public Queen(char c) throws IOException {
         color = c;
         type = 'Q';
@@ -61,6 +82,18 @@ class Queen extends Piece {
         } else {
             img = ImageIO.read(new File("chessPieceFiles\\b-queen.png"));
         }
+    }
+
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) throws IOException {
+        Piece tmpB = new Bishop(this.getColor());
+        Piece tmpR = new Rook(this.getColor()); //Used to evaluate queen movement as they can move as rooks or bishops do
+        boolean bishopBool = false;
+        boolean rookBool = false;
+        if (tmpB.canMove(x, y, newX, newY) && tmpR.canMove(x, y, newX, newY)) {
+            return false;
+        }
+        return true;
     }
 
 }
@@ -76,6 +109,42 @@ class Rook extends Piece {
         }
     }
 
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) {
+        if (newX - x > -8 && newX - x != 0 && Math.abs(newY - y) == 0) {
+            if (newX - x >= 1) {
+                for (int i = x+1; i <= newX-1; i++) {
+                    if (Board.pb.getPiece(i, y) != null) {
+                        return false;
+                    }
+                }
+            } else {
+                for (int i = x-1; i >= newX+1; i--) {
+                    if (Board.pb.getPiece(i, y) != null) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else if (newY - y > -8 && newY - y != 0 && Math.abs(newX - x) == 0) {
+            if (newY - y >= 1) {
+                for (int i = y+1; i <= newY-1; i++) {
+                    if (Board.pb.getPiece(x, i) != null) {
+                        return false;
+                    }
+                }
+            } else {
+                for (int i = y-1; i >= newY+1; i--) {
+                    if (Board.pb.getPiece(x, i) != null) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 }
 
 class Bishop extends Piece {
@@ -87,6 +156,16 @@ class Bishop extends Piece {
         } else {
             img = ImageIO.read(new File("chessPieceFiles\\b-bishop.png"));
         }
+    }
+
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) {
+        if (newX - x > -8 && newX - x != 0 && Math.abs(newY - y) != 0) {
+            return true;
+        } else if (newY - y > -8 && newY - y != 0 && Math.abs(newX - x) != 0) {
+            return true;
+        }
+        return false;
     }
 
 }
@@ -114,6 +193,11 @@ class Pawn extends Piece {
         } else {
             img = ImageIO.read(new File("chessPieceFiles\\b-pawn.png"));
         }
+    }
+
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) {
+        return true;
     }
 
 }

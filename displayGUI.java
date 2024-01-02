@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 
 public class displayGUI extends JFrame {
     public static Piece selectedPiece = null;
@@ -26,26 +27,29 @@ public class displayGUI extends JFrame {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-                selectedPiece = getPiece(e.getX(), e.getY());
-            }
+            public void mousePressed(MouseEvent e) {selectedPiece = selectPiece(e.getX(), e.getY());}
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (selectedPiece != null) {
                     if(e.getX() <= 960 && e.getY() <= 960) {
                         //Checking move validity before updating piece board
-                        if (Board.pb.isValidMove(Board.pb.pieceLayout, fromX, fromY,
-                                e.getX() / 120, e.getY() / 120)) {
-                            Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
-                                    e.getX() / 120, e.getY() / 120);
-                            selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY() - (e.getY() % 120)); //Updates piece to align within tiles
-                            drawingBoard.repaint();
-                        } else {
-                            selectedPiece.setPos(fromX * 120, fromY * 120); // Resetting piece if move is invalid
-                            drawingBoard.repaint();
+                        try {
+                            if (Board.pb.isValidMove(Board.pb.pieceLayout, fromX, fromY,
+                                    e.getX() / 120, e.getY() / 120)) {
+                                Board.pb.updateBoard(Board.pb.pieceLayout, fromX, fromY,
+                                        e.getX() / 120, e.getY() / 120);
+                                selectedPiece.setPos(e.getX() - (e.getX() % 120), e.getY() - (e.getY() % 120)); //Updates piece to align within tiles
+                                drawingBoard.repaint();
+                            } else {
+                                selectedPiece.setPos(fromX * 120, fromY * 120); // Resetting piece if move is invalid
+                                drawingBoard.repaint();
+                            }
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
+                    selectedPiece = null;
                 }
             }
 
@@ -56,7 +60,11 @@ public class displayGUI extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                if (selectedPiece != null) {
+                    resetPiece(selectedPiece); // Reset piece to avoid moving off the panel
+                    selectedPiece = null;
+                    drawingBoard.repaint();
+                }
             }
         });
 
@@ -65,7 +73,6 @@ public class displayGUI extends JFrame {
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null) {
                     if(e.getX() <= 960 && e.getY() <= 960) {
-                        System.out.println(e.getX() + " " + e.getY());
                         selectedPiece.setPos(e.getX() - 60, e.getY() - 60); // Updates piece to be centered on mouse while dragging
                         drawingBoard.repaint();
                     }
@@ -85,13 +92,16 @@ public class displayGUI extends JFrame {
     }
 
 
-    public static Piece getPiece(int x, int y) {
+    public static Piece selectPiece(int x, int y) {
         if (Board.pb.pieceLayout[y / 120][x / 120] != null) {
             fromX = x/120;
             fromY = y/120;
-            return Board.pb.pieceLayout[y / 120][x / 120];
+            return Board.pb.getPiece(x / 120, y / 120);
         }
         return null;
+    }
+    public static void resetPiece(Piece p) {
+        selectedPiece.setPos(fromX * 120, fromY * 120); // Reset piece to original place
     }
 
 }
