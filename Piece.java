@@ -7,6 +7,7 @@ public class Piece {
     char type; // piece type
     int xPos; //x-coordinate of piece
     int yPos; //y-coordinate of piece
+    boolean enPassantPossible = false;
     BufferedImage img; //File for image to display(pieces)
 
     public Piece() {
@@ -31,6 +32,7 @@ public class Piece {
     boolean canMove(int x, int y, int newX, int newY) throws IOException {
         return false;
     }
+
 
 }
 
@@ -190,6 +192,7 @@ class Knight extends Piece {
 }
 
 class Pawn extends Piece {
+    boolean enPassantPossible = false;
     public Pawn(char c) throws IOException {
         color = c;
         type = 'P';
@@ -202,7 +205,48 @@ class Pawn extends Piece {
 
     @Override
     public boolean canMove(int x, int y, int newX, int newY) {
-        return true;
+        if (this.color == 'W') {
+            if (y - newY == 1 && newX == x && Board.pb.getPiece(newX, newY) == null) { // 1 square forward case
+                Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                return true;
+            } else if (y - newY == 1 && Math.abs(newX - x) == 1 && Board.pb.getPiece(newX, newY) != null &&
+                    Board.pb.getPiece(newX, newY).type != 'K') { // Taking a piece case
+                Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                return true;
+            } else if (y - newY == 1 && Math.abs(newX - x) == 1 && Board.pb.getPiece(newX, newY) == null && Board.pb.getPiece(newX, y) != null &&
+                    Board.pb.getPiece(newX, y).type == 'P' && y == 3) { // En passant
+                if (Board.pb.getPiece(newX, y).enPassantPossible) {
+                    Board.pb.kill(newX, y);
+                    Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                    return true;
+                }
+
+            } else if (y - newY == 2 && Math.abs(newX - x) == 0 && y == 6 && Board.pb.getPiece(newX, newY) == null) { // 2 square move off front line case
+                Board.pb.pieceLayout[y][x].enPassantPossible = true;
+                return true;
+            }
+        } else if (this.color == 'B') {
+            if (newY - y == 1 && newX == x && Board.pb.getPiece(newX, newY) == null) {
+                Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                return true;
+            } else if (newY - y == 1 && Math.abs(newX - x) == 1 && Board.pb.getPiece(newX, newY) != null &&
+                    Board.pb.getPiece(newX, newY).type != 'K') {
+                Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                return true;
+            }  else if (newY - y == 1 && Math.abs(newX - x) == 1 && Board.pb.getPiece(newX, newY) == null && Board.pb.getPiece(newX, y) != null &&
+                    Board.pb.getPiece(newX, y).type == 'P' && y == 4) { // En passant
+                System.out.println(Board.pb.getPiece(newX, y).enPassantPossible);
+                if (Board.pb.getPiece(newX, y).enPassantPossible) {
+                    Board.pb.kill(newX, y);
+                    Board.pb.pieceLayout[y][x].enPassantPossible = false;
+                    return true;
+                }
+            } else if (newY - y == 2 && Math.abs(newX - x) == 0 && y == 1 && Board.pb.getPiece(newX, newY) == null) { // 2 square move off front line case
+                Board.pb.pieceLayout[y][x].enPassantPossible = true;
+                return true;
+            }
+        }
+        return false;
     }
 
 }
