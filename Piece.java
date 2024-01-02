@@ -90,10 +90,10 @@ class Queen extends Piece {
         Piece tmpR = new Rook(this.getColor()); //Used to evaluate queen movement as they can move as rooks or bishops do
         boolean bishopBool = false;
         boolean rookBool = false;
-        if (tmpB.canMove(x, y, newX, newY) && tmpR.canMove(x, y, newX, newY)) {
-            return false;
+        if (tmpB.canMove(x, y, newX, newY) || tmpR.canMove(x, y, newX, newY)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 }
@@ -162,7 +162,6 @@ class Bishop extends Piece {
     public boolean canMove(int x, int y, int newX, int newY) {
         int diagCheckVal = Math.abs(newX-x) - Math.abs(newY-y); // Should be zero for diagonal moves
         if ((newX - x >= 1) && (newY - y >= 1) && diagCheckVal == 0) { // Down and Right
-            System.out.println("DR");
             for (int i = x + 1, j = y + 1 ; i <= newX - 1; i++, j++) {
                 if (Board.pb.getPiece(i, j) != null) {
                     return false;
@@ -170,7 +169,6 @@ class Bishop extends Piece {
             }
             return true;
         } else if ((newX - x >= 1) && (newY - y <= -1) && diagCheckVal == 0) { // Up and right
-            System.out.println("UR");
             for (int i = x + 1, j = y - 1 ; i <= newX - 1; i++, j--) {
                 if (Board.pb.getPiece(i, j) != null) {
                     return false;
@@ -178,7 +176,6 @@ class Bishop extends Piece {
             }
             return true;
         } else if ((newX - x <= -1) && (newY - y <= 1) && diagCheckVal == 0) { // Up and Left
-            System.out.println("UL");
             for (int i = x - 1, j = y - 1 ; i >= newX + 1; i--, j--) {
                 if (Board.pb.getPiece(i, j) != null) {
                     return false;
@@ -186,7 +183,6 @@ class Bishop extends Piece {
             }
             return true;
         } else if ((newX - x <= -1) && (newY - y >= 1) && diagCheckVal == 0) { // Down and Left
-            System.out.println("DL");
             for (int i = x - 1, j = y + 1 ; i >= newX + 1; i--, j++) {
                 if (Board.pb.getPiece(i, j) != null) {
                     return false;
