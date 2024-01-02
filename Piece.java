@@ -113,13 +113,13 @@ class Rook extends Piece {
     public boolean canMove(int x, int y, int newX, int newY) {
         if (newX - x > -8 && newX - x != 0 && Math.abs(newY - y) == 0) {
             if (newX - x >= 1) {
-                for (int i = x+1; i <= newX-1; i++) {
+                for (int i = x + 1; i <= newX - 1; i++) { //Right
                     if (Board.pb.getPiece(i, y) != null) {
                         return false;
                     }
                 }
             } else {
-                for (int i = x-1; i >= newX+1; i--) {
+                for (int i = x - 1; i >= newX + 1; i--) { //Left
                     if (Board.pb.getPiece(i, y) != null) {
                         return false;
                     }
@@ -128,13 +128,13 @@ class Rook extends Piece {
             return true;
         } else if (newY - y > -8 && newY - y != 0 && Math.abs(newX - x) == 0) {
             if (newY - y >= 1) {
-                for (int i = y+1; i <= newY-1; i++) {
+                for (int i = y + 1; i <= newY - 1; i++) { //Down
                     if (Board.pb.getPiece(x, i) != null) {
                         return false;
                     }
                 }
             } else {
-                for (int i = y-1; i >= newY+1; i--) {
+                for (int i = y - 1; i >= newY + 1; i--) { //Up
                     if (Board.pb.getPiece(x, i) != null) {
                         return false;
                     }
@@ -160,12 +160,41 @@ class Bishop extends Piece {
 
     @Override
     public boolean canMove(int x, int y, int newX, int newY) {
-        if (newX - x > -8 && newX - x != 0 && Math.abs(newY - y) != 0) {
+        int diagCheckVal = Math.abs(newX-x) - Math.abs(newY-y); // Should be zero for diagonal moves
+        if ((newX - x >= 1) && (newY - y >= 1) && diagCheckVal == 0) { // Down and Right
+            System.out.println("DR");
+            for (int i = x + 1, j = y + 1 ; i <= newX - 1; i++, j++) {
+                if (Board.pb.getPiece(i, j) != null) {
+                    return false;
+                }
+            }
             return true;
-        } else if (newY - y > -8 && newY - y != 0 && Math.abs(newX - x) != 0) {
+        } else if ((newX - x >= 1) && (newY - y <= -1) && diagCheckVal == 0) { // Up and right
+            System.out.println("UR");
+            for (int i = x + 1, j = y - 1 ; i <= newX - 1; i++, j--) {
+                if (Board.pb.getPiece(i, j) != null) {
+                    return false;
+                }
+            }
+            return true;
+        } else if ((newX - x <= -1) && (newY - y <= 1) && diagCheckVal == 0) { // Up and Left
+            System.out.println("UL");
+            for (int i = x - 1, j = y - 1 ; i >= newX + 1; i--, j--) {
+                if (Board.pb.getPiece(i, j) != null) {
+                    return false;
+                }
+            }
+            return true;
+        } else if ((newX - x <= -1) && (newY - y >= 1) && diagCheckVal == 0) { // Down and Left
+            System.out.println("DL");
+            for (int i = x - 1, j = y + 1 ; i >= newX + 1; i--, j++) {
+                if (Board.pb.getPiece(i, j) != null) {
+                    return false;
+                }
+            }
             return true;
         }
-        return false;
+        return false;  //Blocked or no move case
     }
 
 }
