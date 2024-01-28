@@ -5,13 +5,7 @@ import java.io.IOException;
 
 public class PieceTest {
 
-    @Test
-    public void baseTest() {
-        Piece p = new Piece();
-        assertEquals("Error in piece type", 'N', p.getType());
-        assertEquals("Error in piece color", 'W', p.getColor());
 
-    }
     @Test
     public void kingTest() throws IOException {
         Piece p = new King('B');

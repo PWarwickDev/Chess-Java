@@ -1,13 +1,14 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.function.BiPredicate;
 
-public class Piece {
+public abstract class Piece {
     char color; // piece color, either W or B
     char type; // piece type
     int xPos; //x-coordinate of piece
     int yPos; //y-coordinate of piece
-    boolean enPassantPossible = false;
+    boolean enPassantPossible;
     BufferedImage img; //File for image to display(pieces)
 
     public Piece() {
@@ -15,6 +16,7 @@ public class Piece {
         type = 'N';
         xPos = 0;
         yPos = 0;
+        enPassantPossible = false;
     }
 
 
@@ -38,10 +40,11 @@ public class Piece {
 
 class King extends Piece  {
 
-
+    boolean isChecked;
     public King(char c) throws IOException {
         color = c;
         type = 'K';
+        isChecked = false;
         if(color == 'W') {
             img = ImageIO.read(new File("chessPieceFiles\\w-king.png"));
         } else {
@@ -52,8 +55,126 @@ class King extends Piece  {
     public boolean canMove(int x, int y, int newX, int newY) {
         int distX = Math.abs(newX - x);
         int distY = Math.abs(newY - y);
+        int dist = 0;
+        System.out.println(x + " " + y);
+        if (this.canCastle(x, y, newX, newY)) {
+            dist = newX - x;
+            switch(y) {
+
+                case 0 -> { //Black side case
+                    switch (dist) {
+                        case -2 -> { // King castle check left side
+                            if (Board.pb.getPiece(0, 0).getColor() == Board.pb.getPiece(4, 0).getColor()) {
+                                Board.pb.getPiece(0, 0).setPos(3 * 120, 0);
+                                Board.pb.updateBoard(Board.pb.pieceLayout, 0, 0, 3, 0);
+                                return true;
+                            }
+                            return false;
+                        }
+                        case 2 -> { // King castle check right side
+                            if (Board.pb.getPiece(4, 0).getColor() == Board.pb.getPiece(7, 0).getColor()) {
+                                Board.pb.getPiece(7, 0).setPos(5 * 120, 0);
+                                Board.pb.updateBoard(Board.pb.pieceLayout, 7, 0, 5, 0);
+                                return true;
+                            }
+                            return false;
+                        }
+                        default -> {
+                            return false;
+                        }
+                    }
+                }
+                case 7 -> { // White side case
+                    switch (dist) {
+                        case -2 -> { // King castle check left side
+                            if (Board.pb.getPiece(0, 7).getColor() == Board.pb.getPiece(4, 7).getColor()) {
+                                Board.pb.getPiece(0, 7).setPos(3 * 120, 7 * 120);
+                                Board.pb.updateBoard(Board.pb.pieceLayout, 0, 7, 3, 7);
+                                return true;
+                            }
+                            return false;
+                        }
+                        case 2 -> { // King castle check right side
+                            if (Board.pb.getPiece(4, 7).getColor() == Board.pb.getPiece(7, 7).getColor()) {
+                                Board.pb.getPiece(7, 7).setPos(5 * 120, 7 * 120);
+                                Board.pb.updateBoard(Board.pb.pieceLayout, 7, 7, 5, 7);
+                                System.out.println("h");
+                                return true;
+                            }
+                            return false;
+                        }
+                        default -> {
+                            return false;
+                        }
+                    }
+                }
+
+            }
+        }
         return distX + distY <= 2 && distX - distY != 2 && distY - distX != 2;
     }
+    public boolean canCastle(int x, int y, int newX, int newY) {
+        int dist = 0;
+        if (Math.abs(newX - x) == 2 && Math.abs(newY - y) == 0) {
+            dist = newX - x;
+            switch (y) {
+                case 0 ->  {
+                    switch (dist) {
+                        case -2 -> { // King castle check left side
+                            if (Board.pb.getPiece(3, 0) != null) {
+                                return false;
+                            } else if (Board.pb.getPiece(2, 0) != null) {
+                                return false;
+                            } else // is not castling with a rook
+                                if (Board.pb.getPiece(1, 0) != null) {
+                                    return false;
+                                } else return Board.pb.getPiece(0, 0).getType() == 'R';
+                        }
+                        case 2 -> { // King castle check right side
+                            if (Board.pb.getPiece(5, 0) != null) {
+                                return false;
+                            } else if (Board.pb.getPiece(6, 0) != null) {
+                                return false;
+                            } else return Board.pb.getPiece(7, 0).getType() == 'R';
+                        }
+                        default -> {
+                            return false;
+                        }
+                    }
+                }
+
+                case 7 ->  {
+                    switch (dist) {
+                        case -2 -> { // King castle check left side
+                            if (Board.pb.getPiece(3, 7) != null) {
+                                return false;
+                            } else if (Board.pb.getPiece(2, 7) != null) {
+                                return false;
+                            } else // is not castling with a rook
+                                if (Board.pb.getPiece(1, 7) != null) {
+                                    return false;
+                                } else return Board.pb.getPiece(0, 7).getType() == 'R';
+                        }
+                        case 2 -> { // King castle check right side
+                            if (Board.pb.getPiece(5, 7) != null) {
+                                return false;
+                            } else if (Board.pb.getPiece(6, 7) != null) {
+                                return false;
+                            } else return Board.pb.getPiece(7, 7).getType() == 'R';
+                        }
+                        default -> {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void castlingSwap(int x, int y, int newX) {
+    }
+
 
 
 }
@@ -189,6 +310,13 @@ class Knight extends Piece {
 
     }
 
+    @Override
+    public boolean canMove(int x, int y, int newX, int newY) {
+        if (Math.abs(newX - x) == 2 && Math.abs(newY - y) == 1) {
+            return true;
+        } else return Math.abs(newX - x) == 1 && Math.abs(newY - y) == 2;
+    }
+
 }
 
 class Pawn extends Piece {
@@ -235,7 +363,6 @@ class Pawn extends Piece {
                 return true;
             }  else if (newY - y == 1 && Math.abs(newX - x) == 1 && Board.pb.getPiece(newX, newY) == null && Board.pb.getPiece(newX, y) != null &&
                     Board.pb.getPiece(newX, y).type == 'P' && y == 4) { // En passant
-                System.out.println(Board.pb.getPiece(newX, y).enPassantPossible);
                 if (Board.pb.getPiece(newX, y).enPassantPossible) {
                     Board.pb.kill(newX, y);
                     Board.pb.pieceLayout[y][x].enPassantPossible = false;

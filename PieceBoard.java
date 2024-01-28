@@ -42,7 +42,6 @@ public class PieceBoard {
             if (pb[y1][x1].color == pb[y2][x2].color || !pb[y1][x1].canMove(x1, y1, x2, y2)) {
                 return false;
             } else {
-
                 return true;
             }
         } else if (pb[y1][x1].canMove(x1, y1, x2, y2)) {
@@ -58,6 +57,7 @@ public class PieceBoard {
     void kill(int x, int y) {
         this.pieceLayout[y][x] = null;
     }
+
 
 
 }
